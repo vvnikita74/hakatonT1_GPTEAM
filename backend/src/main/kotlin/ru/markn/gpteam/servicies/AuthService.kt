@@ -1,8 +1,8 @@
 package ru.markn.gpteam.servicies
 
 import ru.markn.gpteam.dtos.JwtDto
-import ru.markn.gpteam.dtos.UserDto
+import ru.markn.gpteam.dtos.AssistantDto
 
 interface AuthService {
-    fun createAuthToken(userDto: UserDto): JwtDto
+    fun createAuthToken(assistantDto: AssistantDto): JwtDto
 }

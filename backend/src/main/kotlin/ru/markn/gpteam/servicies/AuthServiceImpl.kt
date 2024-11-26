@@ -5,25 +5,25 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
 import ru.markn.gpteam.dtos.JwtDto
-import ru.markn.gpteam.dtos.UserDto
+import ru.markn.gpteam.dtos.AssistantDto
 import ru.markn.gpteam.utils.JwtUtil
 
 @Service
 @Transactional
 class AuthServiceImpl(
-    private val userService: UserService,
+    private val assistantService: AssistantService,
     private val jwtUtil: JwtUtil,
     private val authenticationManager: AuthenticationManager,
 ) : AuthService {
 
-    override fun createAuthToken(userDto: UserDto): JwtDto {
+    override fun createAuthToken(assistantDto: AssistantDto): JwtDto {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
-                userDto.username,
-                userDto.password
+                assistantDto.assistant,
+                assistantDto.password
             )
         )
-        val userDetails = userService.loadUserByUsername(userDto.username)
+        val userDetails = assistantService.loadUserByUsername(assistantDto.assistant)
         return JwtDto(jwtUtil.generateToken(userDetails))
     }
 }
