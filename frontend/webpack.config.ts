@@ -8,7 +8,10 @@ import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin'
 
 import 'webpack-dev-server'
 
-const webpackConfig = (env): Configuration => ({
+const webpackConfig = (env: {
+	production: string
+	development: string
+}): Configuration => ({
 	entry: './src/index.tsx',
 	...(env.production || !env.development
 		? {}
@@ -47,6 +50,21 @@ const webpackConfig = (env): Configuration => ({
 			{
 				test: /\.css$/,
 				use: ['style-loader', 'css-loader', 'postcss-loader']
+			},
+			{
+				test: /\.(png|jpe?g|gif|webp)$/i,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[path][name].[ext]'
+						}
+					}
+				]
+			},
+			{
+				test: /\.svg$/,
+				use: ['@svgr/webpack']
 			}
 		]
 	},

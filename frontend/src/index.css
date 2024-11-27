@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	input {
+		@apply appearance-none bg-inherit outline-none text-inherit caret-white focus:outline-none placeholder:text-inherit placeholder:opacity-60 w-full
+	}
+	form { 
+		> label:not(:first-child) {
+			@apply mt-4;
+		}
+		> button:not(:first-child) {
+			@apply mt-6
+		}
+	}
+	a {
+		@apply select-none
+	}
+	.base-text {
+		@apply text-base leading-tight sm:text-lg sm:leading-tight font-normal;
+	}
+	.title-text {
+		@apply text-xl font-medium sm:text-2xl leading-normal sm:leading-normal
+	}
+	.base-padding {
+		@apply px-2.5 py-2;
+	}
+}
+
 @layer utilities {
 	.scrollbar-hide::-webkit-scrollbar {
 		display: none;
@@ -24,9 +50,45 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
 	font-style: normal;
-	background: white;
-	color: black;
+	background: black;
+	color: white;
 	min-width: 320px;
 	margin: 0 auto;
 }
 
+body, body > div {
+	width: 100vw;
+	height: 100dvh;
+	height: 100vh;
+	overflow: hidden;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+.btn-loader {
+	figure {
+		opacity: 0;
+	}
+	span {
+		opacity: 1;
+	}
+	&.loading {
+		figure {
+			opacity: 1;
+		}
+		span {
+			opacity: 0;
+		}	
+	}
+}

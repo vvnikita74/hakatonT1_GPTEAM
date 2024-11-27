@@ -11,19 +11,31 @@
     ],
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "allowJs": true,
     "baseUrl": "./",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "downlevelIteration": true,
     "paths": {
+      "pages/*" : [
+        "src/pages/*"
+      ],
+      "layout/*": [
+        "src/layout/*"
+      ],
       "components/*": [
         "src/components/*"
       ],
       "utils/*": [
         "src/utils/*"
+      ],
+      "types/*": [
+        "src/types/*"
+      ],
+      "public/*": [
+        "public/*"
       ]
     }
   },
@@ -32,6 +44,9 @@
     "./webpack.config.ts",
     "./capacitor.config.ts",
     "./tailwind.config.ts",
-    "./postcss.config.ts"
+    "./postcss.config.ts",
+  ],
+  "files": [
+    "./declarations.d.ts"
   ]
 }

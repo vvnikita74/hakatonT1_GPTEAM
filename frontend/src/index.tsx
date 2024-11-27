@@ -1,6 +1,5 @@
 import './index.css'
 
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import {
@@ -14,11 +13,14 @@ import createStore from 'react-auth-kit/createStore'
 import AuthProvider from 'react-auth-kit'
 import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
 
-import LoginPage from './pages/login'
+import LoginPage from 'pages/login'
+import Home from 'pages/home'
 
 const store = createStore({
 	authName: '_auth',
-	authType: 'localstorage'
+	authType: 'cookie',
+	cookieDomain: window.location.hostname,
+	cookieSecure: window.location.protocol === 'https:'
 })
 
 const router = createBrowserRouter(
@@ -28,7 +30,7 @@ const router = createBrowserRouter(
 			<Route
 				element={<AuthOutlet fallbackPath='/login' />}
 				errorElement={null}>
-				<Route path='/' element={null} />
+				<Route index element={<Home />} />
 			</Route>
 		</>
 	)
