@@ -21,3 +21,7 @@ jwt:
 
 front:
   url: ${FRONT_URL:*}
+
+ai:
+  url: ${AI_URL}
+  apikey: ${AI_APIKEY}

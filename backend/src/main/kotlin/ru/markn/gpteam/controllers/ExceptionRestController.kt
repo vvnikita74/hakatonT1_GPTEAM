@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.markn.gpteam.exceptions.EntityAlreadyExistsException
 import ru.markn.gpteam.exceptions.EntityNotFoundException
+import ru.markn.gpteam.exceptions.ExternalServiceRequestException
 import ru.markn.gpteam.exceptions.IncorrectArgumentException
 
 @RestControllerAdvice
@@ -27,6 +28,10 @@ class ExceptionRestController {
     @ExceptionHandler(BadCredentialsException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun badCredentialsHandler(ex: BadCredentialsException) = ex.message
+
+    @ExceptionHandler(ExternalServiceRequestException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun externalServiceRequestExceptionHandler(ex: ExternalServiceRequestException) = ex.message
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

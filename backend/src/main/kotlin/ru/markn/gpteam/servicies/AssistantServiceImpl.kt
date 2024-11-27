@@ -27,27 +27,14 @@ class AssistantServiceImpl(
     private val passwordEncoder: PasswordEncoder
 ) : AssistantService {
 
-    override val assistants: List<Assistant>
-        get() = assistantRepository.findAll()
-            .sortedBy { it.id }
-
     override fun getAssistantById(id: Long): Assistant = assistantRepository.findById(id)
         .orElseThrow { EntityNotFoundException("Assistant with id: $id not found") }
 
     override fun getAssistantByName(name: String): Assistant = assistantRepository.findByName(name)
         .orElseThrow { EntityNotFoundException("Assistant with name: $name not found") }
 
-    override fun findAssistantsByNameContains(name: String): List<Assistant> =
-        assistantRepository.findAssistantsByNameContains(name)
-
-    override fun getAssistantsByIds(ids: List<Long>): List<Assistant> =
-        assistantRepository.findAllById(ids).also {
-            ids.forEach { id ->
-                if (!assistants.map { it.id }.contains(id)) {
-                    throw EntityNotFoundException("Assistant with id: $id not found")
-                }
-            }
-        }
+    override fun getAssistantByApiKey(apiKey: String): Assistant = assistantRepository.findByApiKey(apiKey)
+        .orElseThrow { EntityNotFoundException("Assistant with apiKey: $apiKey not found") }
 
     override fun addAssistant(authDto: AuthDto): Assistant {
         if (assistantRepository.existsByName(authDto.assistant)) {
