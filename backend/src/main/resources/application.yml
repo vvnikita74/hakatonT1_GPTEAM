@@ -1,0 +1,23 @@
+server:
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: gpteam-backend
+  jpa:
+    hibernate:
+      ddl-auto: update
+  docker:
+    compose:
+      profiles:
+        active: local
+  flyway:
+    baseline-on-migrate: true
+
+jwt:
+  lifetime: 60m
+  secret: ${JWT_SECRET}
+
+front:
+  url: ${FRONT_URL:*}
