@@ -41,7 +41,7 @@ class SecurityConfig(
         .csrf(CsrfConfigurer<HttpSecurity>::disable)
         .authorizeHttpRequests { authorizeRequests ->
             authorizeRequests
-                .requestMatchers("/edit").authenticated()
+                .requestMatchers("/save", "/assistant").authenticated()
                 .anyRequest().permitAll()
         }
         .sessionManagement { session ->
