@@ -1,4 +1,4 @@
-import Chat from 'components/chat'
+import Chat from 'components/chat-widget'
 import ContextProvider from 'components/context'
 import FileManager from 'components/file-manager'
 import SaveButton from 'components/save-button'
@@ -23,7 +23,7 @@ export default function Home() {
 					</div>
 				</div>
 				<div className='flex flex-col items-center justify-center'>
-					<Chat className='h-1/2 w-full' />
+					<Chat className='h-2/3 w-full' />
 				</div>
 				<SaveButton />
 			</main>

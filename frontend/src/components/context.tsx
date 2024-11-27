@@ -6,10 +6,11 @@ import {
 } from 'react'
 
 import type Styles from 'types/style'
+import { defaultStyles } from 'types/style'
 
 const FilesContext = createContext(null)
 const StylesContext = createContext(null)
-const PendingContext = createContext(null)
+const IsSavedContext = createContext(null)
 const SettersContext = createContext(null)
 
 export function useSetterContext() {
@@ -24,30 +25,29 @@ export function useStylesContext() {
 	return useContext(StylesContext)
 }
 
+export function useIsSaveContext() {
+	return useContext(IsSavedContext)
+}
+
 export default function ContextProvider({ children }) {
 	const [files, setFiles] = useState<File[]>([])
-	const [styles, setStyles] = useState<Styles>({
-		backgroundColor: 'white',
-		containerPadding: 12,
-		inputPadding: 12,
-		textColor: 'black'
-	})
-	const [pending, setPending] = useState<boolean>(false)
+	const [styles, setStyles] = useState<Styles>(defaultStyles)
+	const [isSaved, setIsSaved] = useState<boolean>(false)
 
 	const setters = useMemo(
-		() => ({ setFiles, setStyles, setPending }),
+		() => ({ setFiles, setStyles, setIsSaved }),
 		[setFiles, setStyles]
 	)
 
 	return (
 		<SettersContext.Provider value={setters}>
-			<PendingContext.Provider value={pending}>
+			<IsSavedContext.Provider value={isSaved}>
 				<FilesContext.Provider value={files}>
 					<StylesContext.Provider value={styles}>
 						{children}
 					</StylesContext.Provider>
 				</FilesContext.Provider>
-			</PendingContext.Provider>
+			</IsSavedContext.Provider>
 		</SettersContext.Provider>
 	)
 }

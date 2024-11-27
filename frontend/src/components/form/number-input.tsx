@@ -23,7 +23,7 @@ export default function NumberInput({
 				data-type='number'
 				defaultValue={defaultValue}
 				onChange={handleChange}
-				className='base-text ml-5 h-6 w-6 bg-black text-center text-white
+				className='base-text ml-5 h-7 w-7 bg-black text-center text-white
 					transition-colors focus:bg-opacity-70'
 			/>
 		</div>

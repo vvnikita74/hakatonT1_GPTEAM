@@ -14,7 +14,7 @@
 	input[type=number] {
 		appearance: textfield;
 	}
-	form { 
+	.form-col { 
 		> label:not(:first-child) {
 			@apply mt-4;
 		}
@@ -83,7 +83,6 @@ body, body > div {
 	}
 }
 
-
 .btn-loader {
 	figure {
 		opacity: 0;
@@ -98,5 +97,15 @@ body, body > div {
 		span {
 			opacity: 0;
 		}	
+	}
+}
+
+.disabled-text {
+	display: none;
+}
+
+.chat-disabled {
+	.disabled-text {
+		display: flex;
 	}
 }

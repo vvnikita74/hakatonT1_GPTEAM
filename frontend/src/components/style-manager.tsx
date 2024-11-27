@@ -5,11 +5,12 @@ import { ChangeEvent } from 'react'
 import type Styles from 'types/style'
 import NumberInput from './form/number-input'
 import debounce from 'utils/debounce'
+import { defaultStyles } from 'types/style'
 
 export default function StyleManager({ className = '' }) {
 	const { setStyles } = useSetterContext()
 
-	const handleColorChange = debounce(
+	const handleChange = debounce(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			const { target } = event
 
@@ -41,37 +42,37 @@ export default function StyleManager({ className = '' }) {
 				}
 			}
 		},
-		375
+		100
 	)
 
 	return (
 		<div className={`flex w-fit flex-col ${className}`}>
 			<ColorInput
-				defaultValue='black'
+				defaultValue={defaultStyles.textColor}
 				objKey='textColor'
 				label='Цвет текста'
-				handleChange={handleColorChange}
+				handleChange={handleChange}
 				className='mt-3 justify-between first:mt-0'
 			/>
 			<ColorInput
-				defaultValue='white'
+				defaultValue={defaultStyles.backgroundColor}
 				objKey='backgroundColor'
 				label='Цвет фона'
-				handleChange={handleColorChange}
-				className='mt-3 justify-between first:mt-0'
-			/>
-			<ColorInput
-				defaultValue={'gray'}
-				label='Цвет фона поля ввода'
-				objKey='inputBackgroundColor'
-				handleChange={handleColorChange}
+				handleChange={handleChange}
 				className='mt-3 justify-between first:mt-0'
 			/>
 			<NumberInput
-				defaultValue={12}
+				defaultValue={defaultStyles.containerPadding}
 				label='Оступы, px'
 				objKey='containerPadding'
-				handleChange={handleColorChange}
+				handleChange={handleChange}
+				className='mt-3 justify-between first:mt-0'
+			/>
+			<NumberInput
+				defaultValue={defaultStyles.containerRadius}
+				label='Закругление, px'
+				objKey='containerRadius'
+				handleChange={handleChange}
 				className='mt-3 justify-between first:mt-0'
 			/>
 		</div>

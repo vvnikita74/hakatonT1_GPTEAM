@@ -27,12 +27,12 @@ export default function FileInput() {
 		<button
 			type='button'
 			onClick={handleClick}
-			className='base-text bg-indigo-500 p-2 text-white'>
+			className='base-text w-fit bg-indigo-500 p-2 text-white'>
 			<input
 				type='file'
 				multiple
 				hidden
-				accept='.txt'
+				accept='.txt, .pdf, .doc, .docx, .csv, .xlsx'
 				onChange={handleFileInput}
 				className='pointer-events-none'
 			/>
