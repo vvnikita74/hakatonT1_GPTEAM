@@ -15,6 +15,8 @@ import ru.markn.gpteam.models.Assistant
 import ru.markn.gpteam.models.Prompt
 import ru.markn.gpteam.repositories.AssistantRepository
 import ru.markn.gpteam.repositories.PromptRepository
+import java.security.SecureRandom
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Transactional
@@ -62,58 +64,58 @@ class AssistantServiceImpl(
         if (updateAssistantDto.assistant == null) {
             throw IllegalArgumentException("Assistant name can't be blank")
         }
-        return assistantRepository.getByName(updateAssistantDto.assistant).let { assistant ->
-            updateAssistantDto.styles?.let { styles ->
-                if (styles.isEmpty()) {
-                    throw IllegalArgumentException("Styles can't be empty")
-                }
+        val assistant = getAssistantByName(updateAssistantDto.assistant)
+        updateAssistantDto.styles?.let { styles ->
+            if (styles.isEmpty()) {
+                throw IllegalArgumentException("Styles can't be empty")
             }
-            val textPrompt = updateAssistantDto.text?.let { newContent ->
-                promptRepository.findByName("text").getOrNull()?.run {
-                    copy(content = newContent)
-                } ?: Prompt(
-                    name = "text",
-                    content = newContent,
-                    assistant = assistant
-                )
-            }
-            val deletedPrompts = updateAssistantDto.deletedFiles?.map { fileDto ->
-                assistant.prompts.find { prompt ->
-                    prompt.id == fileDto.id
-                }?.apply {
-                    if (name != fileDto.filename) {
-                        throw IncorrectArgumentException("File with id: ${fileDto.id} name mismatch")
-                    }
-                } ?: throw EntityNotFoundException("File with id: ${fileDto.id} not found")
-            }
-            // TODO: Реализация внешнего сервиса для получения контента файлов
-            val filePrompts = updateAssistantDto.files?.map { file ->
-                Prompt(
-                    name = file.originalFilename ?: throw IncorrectArgumentException("File name can't be blank"),
-                    content = file.bytes.toString(),
-                    assistant = assistant
-                )
-            }
-            val newPrompts = assistant.prompts.toMutableList().apply {
-                textPrompt?.let {
-                    find { prompt -> prompt.name == "text" }?.let { oldTextPrompt ->
-                        remove(oldTextPrompt)
-                    }
-                    add(textPrompt)
-                }
-                deletedPrompts?.let {
-                    promptRepository.deleteAll(it)
-                    removeAll(it)
-                }
-                filePrompts?.run(::addAll)
-            }
-            assistantRepository.save(
-                assistant.copy(
-                    styles = updateAssistantDto.styles ?: assistant.styles,
-                    prompts = newPrompts
-                )
+        }
+        val textPrompt = updateAssistantDto.text?.let { newContent ->
+            promptRepository.findByName("text").getOrNull()?.run {
+                copy(content = newContent)
+            } ?: Prompt(
+                name = "text",
+                content = newContent,
+                assistant = assistant
             )
         }
+        val deletedPrompts = updateAssistantDto.deletedFiles?.map { fileDto ->
+            assistant.prompts.find { prompt ->
+                prompt.id == fileDto.id
+            }?.apply {
+                if (name != fileDto.filename) {
+                    throw IncorrectArgumentException("File with id: ${fileDto.id} name mismatch")
+                }
+            } ?: throw EntityNotFoundException("File with id: ${fileDto.id} not found")
+        }
+        // TODO: Реализация внешнего сервиса для получения контента файлов
+        val filePrompts = updateAssistantDto.files?.map { file ->
+            Prompt(
+                name = file.originalFilename ?: throw IncorrectArgumentException("File name can't be blank"),
+                content = file.bytes.toString(),
+                assistant = assistant
+            )
+        }
+        val newPrompts = assistant.prompts.toMutableList().apply {
+            textPrompt?.let {
+                find { prompt -> prompt.name == "text" }?.let { oldTextPrompt ->
+                    remove(oldTextPrompt)
+                }
+                add(textPrompt)
+            }
+            deletedPrompts?.let {
+                promptRepository.deleteAll(it)
+                removeAll(it)
+            }
+            filePrompts?.run(::addAll)
+        }
+        return assistantRepository.save(
+            assistant.copy(
+                apiKey = assistant.apiKey.ifBlank(::generateApiKey),
+                styles = updateAssistantDto.styles ?: assistant.styles,
+                prompts = newPrompts
+            )
+        )
     }
 
     override fun deleteAssistant(id: Long) {
@@ -131,5 +133,10 @@ class AssistantServiceImpl(
             assistant.password,
             listOf(SimpleGrantedAuthority("ROLE_ASSISTANT"))
         )
+    }
+
+    private fun generateApiKey(): String = ByteArray(32).let {
+        SecureRandom().nextBytes(it)
+        Base64.getUrlEncoder().withoutPadding().encodeToString(it)
     }
 }

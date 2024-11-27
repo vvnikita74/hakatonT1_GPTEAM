@@ -15,6 +15,8 @@ data class Assistant(
     val password: String,
     @Column(name = "styles", nullable = false)
     val styles: String = "{}",
+    @Column(name = "api_key")
+    val apiKey: String = "",
     @OneToMany(mappedBy = "assistant", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val prompts: List<Prompt> = emptyList()
 )

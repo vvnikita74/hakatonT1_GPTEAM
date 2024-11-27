@@ -16,6 +16,7 @@ fun Prompt.toDto() = FileAssistantDto(
 
 fun Assistant.toDto() = DetailsAssistantDto(
     name = name,
+    apiKey = apiKey,
     styles = styles,
     text = prompts.find { it.name == "text" }?.content ?: "",
     files = prompts.filterNot { it.name == "text" }.map { it.toDto() }

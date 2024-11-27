@@ -6,6 +6,8 @@ import java.io.Serializable
 data class DetailsAssistantDto(
     @field:NotBlank(message = "Assistant name cannot be empty")
     val name: String,
+    @field:NotBlank(message = "Api key cannot be empty")
+    val apiKey: String,
     @field:NotBlank(message = "Styles cannot be empty")
     val styles: String,
     val text: String = "",
