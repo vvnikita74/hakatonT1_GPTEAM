@@ -27,10 +27,10 @@ export function useStylesContext() {
 export default function ContextProvider({ children }) {
 	const [files, setFiles] = useState<File[]>([])
 	const [styles, setStyles] = useState<Styles>({
-		theme: 'black',
-		containerPadding: '12px',
-		inputPadding: '12px',
-		textColor: 'white'
+		backgroundColor: 'white',
+		containerPadding: 12,
+		inputPadding: 12,
+		textColor: 'black'
 	})
 	const [pending, setPending] = useState<boolean>(false)
 

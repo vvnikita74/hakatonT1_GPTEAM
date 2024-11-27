@@ -22,6 +22,7 @@ export default function StyleInput({
 				<input
 					type='color'
 					data-key={objKey}
+					data-type='color'
 					onChange={handleChange}
 					className='absolute left-0 top-0 z-10 h-full w-full cursor-pointer opacity-0'
 				/>

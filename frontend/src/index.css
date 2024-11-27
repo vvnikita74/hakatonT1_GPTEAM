@@ -6,6 +6,14 @@
 	input {
 		@apply appearance-none bg-inherit outline-none text-inherit caret-white focus:outline-none placeholder:text-inherit placeholder:opacity-60 w-full
 	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	input[type=number] {
+		appearance: textfield;
+	}
 	form { 
 		> label:not(:first-child) {
 			@apply mt-4;

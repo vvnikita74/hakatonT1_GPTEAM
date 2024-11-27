@@ -1,0 +1,45 @@
+name: gpteam
+services:
+  db:
+    image: postgres:latest
+    container_name: gpteam-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+  backend:
+    image: mark3317/gpteam-backend:latest
+    container_name: gpteam-backend
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - FRONT_URL=${FRONT_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - AI_URL=${AI_URL}
+      - AI_APIKEY=${AI_APIKEY}
+    ports:
+      - "${BACKEND_PORT}:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8090:80"
+    environment:
+      - API_URL=${API_URL}
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  microservice:
+    build:
+      context: ./microservice
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8000"

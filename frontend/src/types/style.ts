@@ -1,6 +1,6 @@
 export default interface Styles {
-	theme: 'black' | 'light'
-	containerPadding: string
-	inputPadding: string
+	backgroundColor: string
 	textColor: string
+	containerPadding: number
+	inputPadding: number
 }

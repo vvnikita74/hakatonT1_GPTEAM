@@ -3,45 +3,76 @@ import ColorInput from 'components/form/color-input'
 import { ChangeEvent } from 'react'
 
 import type Styles from 'types/style'
+import NumberInput from './form/number-input'
+import debounce from 'utils/debounce'
 
 export default function StyleManager({ className = '' }) {
 	const { setStyles } = useSetterContext()
 
-	const handleChange = (
-		event: ChangeEvent<HTMLInputElement>
-	) => {
-		const { currentTarget } = event
+	const handleColorChange = debounce(
+		(event: ChangeEvent<HTMLInputElement>) => {
+			const { target } = event
 
-		if (currentTarget) {
-			const { value, dataset } = currentTarget
-			const { key } = dataset
+			if (target) {
+				const { value, dataset } = target
+				const { key, type } = dataset
 
-			const colorSpan = document.getElementById(key)
-			console.log(colorSpan)
-			if (colorSpan) colorSpan.style.backgroundColor = value
+				switch (type) {
+					case 'color': {
+						const colorSpan = document.getElementById(key)
+						if (colorSpan)
+							colorSpan.style.backgroundColor = value
 
-			setStyles((prev: Styles) => ({
-				...prev,
-				[key]: currentTarget.value
-			}))
-		}
-	}
+						setStyles((prev: Styles) => ({
+							...prev,
+							[key]: value
+						}))
+
+						break
+					}
+					case 'number': {
+						setStyles((prev: Styles) => ({
+							...prev,
+							[key]: Number(value)
+						}))
+
+						break
+					}
+				}
+			}
+		},
+		375
+	)
 
 	return (
-		<div className={`flex flex-col ${className}`}>
+		<div className={`flex w-fit flex-col ${className}`}>
 			<ColorInput
 				defaultValue='black'
 				objKey='textColor'
 				label='Цвет текста'
-				handleChange={handleChange}
-				className='mt-3 w-fit first:mt-0'
+				handleChange={handleColorChange}
+				className='mt-3 justify-between first:mt-0'
 			/>
 			<ColorInput
 				defaultValue='white'
-				objKey='textColor'
+				objKey='backgroundColor'
 				label='Цвет фона'
-				handleChange={handleChange}
-				className='mt-3 w-fit first:mt-0'
+				handleChange={handleColorChange}
+				className='mt-3 justify-between first:mt-0'
+			/>
+			<ColorInput
+				defaultValue={'gray'}
+				label='Цвет фона поля ввода'
+				objKey='inputBackgroundColor'
+				handleChange={handleColorChange}
+				className='mt-3 justify-between first:mt-0'
+			/>
+			<NumberInput
+				defaultValue={12}
+				label='Оступы, px'
+				objKey='containerPadding'
+				handleChange={handleColorChange}
+				className='mt-3 justify-between first:mt-0'
 			/>
 		</div>
 	)
