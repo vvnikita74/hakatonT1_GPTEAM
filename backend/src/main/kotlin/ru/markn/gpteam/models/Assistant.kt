@@ -12,5 +12,9 @@ data class Assistant(
     @Column(name = "name", nullable = false, unique = true)
     val name: String,
     @Column(name = "password", nullable = false)
-    val password: String
+    val password: String,
+    @Column(name = "styles", nullable = false)
+    val styles: String = "{}",
+    @OneToMany(mappedBy = "assistant", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val prompts: List<Prompt> = emptyList()
 )

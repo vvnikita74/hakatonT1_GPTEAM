@@ -1,7 +1,8 @@
 package ru.markn.gpteam.servicies
 
 import org.springframework.security.core.userdetails.UserDetailsService
-import ru.markn.gpteam.dtos.AssistantDto
+import ru.markn.gpteam.dtos.AuthDto
+import ru.markn.gpteam.dtos.UpdateAssistantDto
 import ru.markn.gpteam.models.Assistant
 
 interface AssistantService : UserDetailsService {
@@ -10,6 +11,7 @@ interface AssistantService : UserDetailsService {
     fun getAssistantsByIds(ids: List<Long>): List<Assistant>
     fun getAssistantByName(name: String): Assistant
     fun findAssistantsByNameContains(name: String): List<Assistant>
-    fun addAssistant(assistantDto: AssistantDto): Assistant
+    fun addAssistant(authDto: AuthDto): Assistant
+    fun updateAssistant(updateAssistantDto: UpdateAssistantDto): Assistant
     fun deleteAssistant(id: Long)
 }
