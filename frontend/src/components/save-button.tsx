@@ -32,7 +32,8 @@ export default function SaveButton() {
 		const formData = new FormData()
 
 		files.forEach((item: File) => {
-			formData.append('files', item, item.name)
+			if (item instanceof File)
+				formData.append('files', item, item.name)
 		})
 
 		formData.append('styles', JSON.stringify(styles))
@@ -45,7 +46,10 @@ export default function SaveButton() {
 			},
 			body: formData,
 			redirect: 'follow'
-		}).catch(() => {})
+		}).then(res => { if (res.status === 200){const { current } = btnRef
+		if (current) {
+			current.classList.add('opacity-0')}
+		} }).catch(() => {})
 
 		setStatus({ saved: false, pending: false })		
 	}
