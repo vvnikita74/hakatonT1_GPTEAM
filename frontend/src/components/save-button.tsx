@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { useEffect, useRef } from 'react'
 import {
 	useFilesContext,
@@ -36,8 +37,17 @@ export default function SaveButton() {
 			const req = await fetch(`${API_URL}/assistant`, {
 				method: 'POST',
 				headers: {
-					Authorization: authHeader,
-					'Content-Type': 'multipart/form-data'
+					'authorization': authHeader,
+					'content-Type': 'multipart/form-data'
+					// 'Access-Control-Allow-Origin':
+					// 	'http://172.20.10.2:8080',
+					// Origin: 'http://172.20.10.2:8080',
+					// 'Access-Control-Allow-Methods':
+					// 	'POST, GET, OPTIONS, DELETE, PUT',
+					// 'Access-Control-Allow-Headers':
+					// 	'x-requested-with, Content-Type, Origin, Authorization, Accept',
+					// 'Content-Security-Policy':
+					// 	'connect-src http://172.20.10.3:8080'
 				},
 				body: formData
 			})

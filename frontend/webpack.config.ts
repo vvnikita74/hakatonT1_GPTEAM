@@ -5,16 +5,16 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import ESLintPlugin from 'eslint-webpack-plugin'
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin'
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 
 import 'webpack-dev-server'
 
-const envFromFile = dotenv.config().parsed || {}
+// const envFromFile = dotenv.config().parsed || {}
 
-const env = {
-	...envFromFile,
-	...process.env
-}
+// const env = {
+// 	...envFromFile,
+// 	...process.env
+// }
 
 const webpackConfig = (envConfig: {
 	production: string
@@ -88,11 +88,7 @@ const webpackConfig = (envConfig: {
 			),
 			'process.env.VERSION': JSON.stringify(
 				require('./package.json').version
-			),
-			...Object.keys(env).reduce((acc, key) => {
-				acc[`process.env.${key}`] = JSON.stringify(env[key])
-				return acc
-			}, {})
+			)
 		}),
 		new ForkTsCheckerWebpackPlugin(),
 		new ESLintPlugin({ files: './src/**/*.{ts,tsx,js,jsx}' })
