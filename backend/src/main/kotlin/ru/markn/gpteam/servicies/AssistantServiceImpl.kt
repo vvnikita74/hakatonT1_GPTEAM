@@ -117,7 +117,7 @@ class AssistantServiceImpl(
         return User(
             assistant.name,
             assistant.password,
-            listOf(SimpleGrantedAuthority("ROLE_ASSISTANT"))
+            listOf(SimpleGrantedAuthority("ROLE_USER"))
         )
     }
 

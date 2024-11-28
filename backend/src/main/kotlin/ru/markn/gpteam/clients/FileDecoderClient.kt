@@ -37,7 +37,7 @@ class FileDecoderClient(
             async {
                 runCatching {
                     client.submitFormWithBinaryData(
-                        url = "http://$fileDecoderUrl/api/v1/decode-file/",
+                        url = "$fileDecoderUrl/api/v1/decode-file/",
                         formData = formData {
                             append("file", file.bytes, Headers.build {
                                 append(HttpHeaders.ContentType, "text/plain")
