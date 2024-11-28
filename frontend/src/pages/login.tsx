@@ -12,7 +12,7 @@ export default function LoginPage() {
 					Авторизация
 				</h2>
 			</div>
-			<LoginForm className='w-full max-w-96' />
+			<LoginForm className='form-col w-full max-w-96' />
 		</section>
 	)
 }

@@ -6,7 +6,15 @@
 	input {
 		@apply appearance-none bg-inherit outline-none text-inherit caret-white focus:outline-none placeholder:text-inherit placeholder:opacity-60 w-full
 	}
-	form { 
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	input[type=number] {
+		appearance: textfield;
+	}
+	.form-col { 
 		> label:not(:first-child) {
 			@apply mt-4;
 		}
@@ -75,7 +83,6 @@ body, body > div {
 	}
 }
 
-
 .btn-loader {
 	figure {
 		opacity: 0;
@@ -90,5 +97,15 @@ body, body > div {
 		span {
 			opacity: 0;
 		}	
+	}
+}
+
+.disabled-text {
+	display: none;
+}
+
+.chat-disabled {
+	.disabled-text {
+		display: flex;
 	}
 }
