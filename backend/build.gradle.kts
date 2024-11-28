@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "ru.markn"
-version = "0.0.5"
+version = "0.0.6"
 
 java {
     toolchain {
@@ -40,6 +40,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+    implementation("org.springframework:spring-test")
 
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")

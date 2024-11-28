@@ -17,7 +17,7 @@ class AuthController(
 
     @PostMapping("/signUp")
     fun signUp(@Valid @RequestBody newAuthDto: AuthDto): JwtDto {
-        assistantService.addAssistant(newAuthDto)
+        assistantService.addUser(newAuthDto)
         return authService.createAuthToken(newAuthDto)
     }
 }

@@ -2,6 +2,7 @@ package ru.markn.gpteam.controllers
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.springframework.web.bind.annotation.*
 import ru.markn.gpteam.dtos.*
 import ru.markn.gpteam.servicies.AiModelService
@@ -23,7 +24,7 @@ class AssistantController(
     @PostMapping("/assistant")
     fun saveAssistant(
         @Valid @ModelAttribute formDataUpdateAssistantDto: FormDataUpdateAssistantDto,
-        principal: Principal
+        @Valid @NotNull principal: Principal
     ): DetailsAssistantDto =
         assistantService.updateAssistant(
             formDataUpdateAssistantDto.copy(assistant = principal.name).toDetailsDto()

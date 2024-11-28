@@ -23,7 +23,7 @@ class AiModelClient(
     private val apiKey: String
 ) {
     companion object {
-        private const val AI_MODEL = "mistral-large-latest"
+        private const val AI_MODEL = "pixtral-12b-2409"
     }
 
     private val client: HttpClient = HttpClient {

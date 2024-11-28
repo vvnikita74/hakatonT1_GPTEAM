@@ -37,5 +37,13 @@ fun FormDataUpdateAssistantDto.toDetailsDto() = UpdateAssistantDto(
         }
     }.getOrElse {
         throw IncorrectArgumentException("Incorrect deleted files format")
-    }
+    },
+    dbConnect = runCatching {
+        dbConnect?.let {
+            jacksonObjectMapper().readValue(it, DbConnectDto::class.java)
+        }
+    }.getOrElse {
+        throw IncorrectArgumentException("Incorrect dbConnect format")
+    },
+    urlParse = urlParse?.let { UrlParseDto(it) }
 )
