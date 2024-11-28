@@ -4,16 +4,17 @@ import StylesListener from 'components/chat/chat-listener'
 import ChatContextProvider from 'components/chat/context'
 import ContentView from 'components/chat/content'
 
-export default function Chat({ className = '' }) {
+export default function Chat({ className = '', apiKey = '' }) {
 	const user = useAuthUser() as { name: string }
 
 	return (
 		<div
 			id='assistant-container'
 			className={`relative flex flex-col rounded-[var(--containerRadius,12px)]
-				bg-[var(--backgroundColor,#99ccff)]
+				bg-[var(--backgroundColor,#ffffff)]
 				p-[var(--containerPadding,18px)]
-				text-[color:var(--textColor,#000000)] transition-all ${className}`}>
+				text-[color:var(--textColor,#000000)] shadow-2xl transition-all
+				${className}`}>
 			<StylesListener containerID='assistant-container' />
 			<div className='base-text text-left'>
 				{user?.name || 'Чат-ассистент'} (предварительный
@@ -28,7 +29,7 @@ export default function Chat({ className = '' }) {
 				</span>
 			</div> */}
 			<ChatContextProvider>
-				<ContentView className='mt-4' />
+				<ContentView className='mt-4' apiKey={apiKey} />
 			</ChatContextProvider>
 		</div>
 	)

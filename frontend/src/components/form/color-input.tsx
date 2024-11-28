@@ -15,8 +15,8 @@ export default function StyleInput({
 }) {
 	return (
 		<div
-			className={`flex flex-row items-center bg-indigo-500 p-2 text-white
-				${className}`}>
+			className={`base-padding flex flex-row items-center rounded-xl bg-indigo-500
+				text-white ${className}`}>
 			<span className='base-text'>{label}</span>
 			<div className='relative ml-3 w-fit'>
 				<input

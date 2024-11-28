@@ -4,7 +4,7 @@
 
 @layer base {
 	input {
-		@apply appearance-none bg-inherit outline-none text-inherit caret-white focus:outline-none placeholder:text-inherit placeholder:opacity-60 w-full
+		@apply appearance-none bg-inherit outline-none text-inherit caret-black focus:outline-none placeholder:text-inherit placeholder:opacity-60 w-full
 	}
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
@@ -50,7 +50,6 @@
 
 body {
   margin: 0;
-	padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -58,8 +57,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
 	font-style: normal;
-	background: black;
-	color: white;
+	background: rgb(231,253,255);
+	background: linear-gradient(90deg, rgba(231,253,255,1) 0%, rgba(255,255,255,1) 45%, rgba(214,252,255,1) 100%);
+	color: black;
 	min-width: 320px;
 	margin: 0 auto;
 }
@@ -107,17 +107,23 @@ body {
 		}	
 	}
 }
-/* 
-.chat-disabled {
-	form {
-		input {
-			@apply border-red-500 opacity-50 pointer-events-none;
-		}
-		button {
-			@apply pointer-events-none;
-			svg {
-				@apply text-red-500 opacity-50;
-			}
-		}
+
+.hidden-opacity {
+	@apply pointer-events-none opacity-0;
+	visibility: hidden;
+	z-index: -1;
+	transition:
+		opacity 0.3s,
+		visibility 0.3s 0.3s,
+		z-index 0.3s 0.3s;
+	&.opened {
+		@apply opacity-100;
+		z-index: var(--z-index, 30);
+		pointer-events: unset;
+		visibility: unset;
+		transition:
+			opacity 0.3s,
+			z-index 0s,
+			visibility 0s;
 	}
-} */
+}

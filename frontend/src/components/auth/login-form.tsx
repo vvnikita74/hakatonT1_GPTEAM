@@ -41,16 +41,16 @@ export default function LoginForm({ className = '' }) {
 				const req = await fetch(`${API_URL}/signIn`, {
 					method: 'POST',
 					headers: {
-						'Content-type': 'application/json'
-						// 'Access-Control-Allow-Origin':
-						// 	'http://localhost:8081',
-						// Origin: 'http://localhost:8081',
-						// 'Access-Control-Allow-Methods':
-						// 	'POST, GET, OPTIONS, DELETE, PUT',
-						// 'Access-Control-Allow-Headers':
-						// 	'x-requested-with, Content-Type, Origin, Authorization, Accept',
-						// 'Content-Security-Policy':
-						// 	'connect-src http://localhost:8080'
+						'Content-type': 'application/json',
+						'Access-Control-Allow-Origin':
+							'http://localhost:8081',
+						Origin: 'http://localhost:8081',
+						'Access-Control-Allow-Methods':
+							'POST, GET, OPTIONS, DELETE, PUT',
+						'Access-Control-Allow-Headers':
+							'x-requested-with, Content-Type, Origin, Authorization, Accept',
+						'Content-Security-Policy':
+							'connect-src http://172.20.10.3:8080'
 					},
 					body: JSON.stringify(data)
 				})
@@ -111,8 +111,8 @@ export default function LoginForm({ className = '' }) {
 			<button
 				type='submit'
 				ref={btnRef}
-				className='base-text btn-loader base-padding relative w-full bg-indigo-500
-					text-white'>
+				className='base-text btn-loader base-padding relative w-full rounded-xl
+					bg-indigo-500 text-white'>
 				<span className='pointer-events-none text-inherit transition-opacity'>
 					Создать или редактировать
 				</span>
