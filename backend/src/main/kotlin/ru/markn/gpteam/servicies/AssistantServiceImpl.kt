@@ -2,7 +2,6 @@ package ru.markn.gpteam.servicies
 
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -17,8 +16,11 @@ import ru.markn.gpteam.exceptions.EntityNotFoundException
 import ru.markn.gpteam.exceptions.IncorrectArgumentException
 import ru.markn.gpteam.models.Assistant
 import ru.markn.gpteam.models.Prompt
+import ru.markn.gpteam.models.Role
+import ru.markn.gpteam.models.User
 import ru.markn.gpteam.repositories.AssistantRepository
 import ru.markn.gpteam.repositories.PromptRepository
+import ru.markn.gpteam.repositories.UserRepository
 import ru.markn.gpteam.utils.toDto
 import java.security.SecureRandom
 import java.util.*
@@ -28,12 +30,13 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class AssistantServiceImpl(
     private val assistantRepository: AssistantRepository,
+    private val userRepository: UserRepository,
     private val promptRepository: PromptRepository,
     private val fileDecoderClient: FileDecoderClient,
     private val passwordEncoder: PasswordEncoder
 ) : AssistantService {
 
-    override fun getAssistantByName(name: String): Assistant = assistantRepository.findByName(name)
+    override fun getAssistantByName(name: String): Assistant = assistantRepository.findByUserName(name)
         .orElseThrow { EntityNotFoundException("Assistant with name: $name not found") }
 
     @Cacheable(value = [RedisConfig.ASSISTANT_API_KEY], key = "#apiKey")
@@ -41,12 +44,19 @@ class AssistantServiceImpl(
         .orElseThrow { EntityNotFoundException("Assistant with apiKey: $apiKey not found") }.toDto()
 
     override fun addAssistant(authDto: AuthDto): Assistant {
-        if (assistantRepository.existsByName(authDto.assistant)) {
+        if (userRepository.existsByName(authDto.assistant)) {
             throw EntityAlreadyExistsException("Assistant with name ${authDto.assistant} exist")
         }
+        val user = userRepository.save(
+            User(
+                name = authDto.assistant,
+                password = passwordEncoder.encode(authDto.password),
+                roles = listOf(Role(name = "ROLE_USER"))
+            )
+        )
         val assistant = Assistant(
-            name = authDto.assistant,
-            password = passwordEncoder.encode(authDto.password)
+            apiKey = generateApiKey(),
+            user = user
         )
         return assistantRepository.save(assistant)
     }
@@ -112,12 +122,12 @@ class AssistantServiceImpl(
     }
 
     override fun loadUserByUsername(name: String): UserDetails {
-        val assistant = assistantRepository.findByName(name)
+        val user = userRepository.findByName(name)
             .orElseThrow { EntityNotFoundException("Assistant with name: $name not found") }
-        return User(
-            assistant.name,
-            assistant.password,
-            listOf(SimpleGrantedAuthority("ROLE_USER"))
+        return org.springframework.security.core.userdetails.User(
+            user.name,
+            user.password,
+            user.roles.map { role -> SimpleGrantedAuthority(role.name) }
         )
     }
 

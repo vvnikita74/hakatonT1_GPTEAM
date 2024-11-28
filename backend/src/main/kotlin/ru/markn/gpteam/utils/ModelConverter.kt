@@ -12,14 +12,14 @@ fun Prompt.toDetailsDto() = FileAssistantDto(
 )
 
 fun Assistant.toDto() = AssistantDto(
-    name = name,
+    name = user.name,
     apiKey = apiKey,
     styles = styles,
     prompts = prompts.map { ChatMessageDto(content = it.content, role = ChatMessageRole.SYSTEM) }
 )
 
 fun Assistant.toDetailsDto() = DetailsAssistantDto(
-    name = name,
+    name = user.name,
     apiKey = apiKey,
     styles = styles,
     text = prompts.find { it.name == "text" }?.content ?: "",
