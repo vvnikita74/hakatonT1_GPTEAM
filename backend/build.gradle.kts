@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "ru.markn"
-version = "0.0.4"
+version = "0.0.5"
 
 java {
     toolchain {

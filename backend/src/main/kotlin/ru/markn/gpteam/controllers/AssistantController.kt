@@ -3,12 +3,10 @@ package ru.markn.gpteam.controllers
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import org.springframework.web.bind.annotation.*
-import ru.markn.gpteam.dtos.ChatAssistantDto
-import ru.markn.gpteam.dtos.ChatMessageDto
-import ru.markn.gpteam.dtos.DetailsAssistantDto
-import ru.markn.gpteam.dtos.FormDataUpdateAssistantDto
+import ru.markn.gpteam.dtos.*
 import ru.markn.gpteam.servicies.AiModelService
 import ru.markn.gpteam.servicies.AssistantService
+import ru.markn.gpteam.utils.JwtUtil
 import ru.markn.gpteam.utils.toDetailsDto
 import java.security.Principal
 
@@ -35,5 +33,14 @@ class AssistantController(
     suspend fun chatWithAssistant(
         @NotBlank @RequestHeader("Authorization") authorizationHeader: String,
         @Valid @RequestBody chatMessagesDto: ChatAssistantDto
-    ): ChatMessageDto = aiModelService.chatCompletion(authorizationHeader, chatMessagesDto)
+    ): ChatMessageDto =
+        aiModelService.chatCompletion(JwtUtil.getKeyFromAuthHeader(authorizationHeader), chatMessagesDto)
+
+    @GetMapping("/chat")
+    fun getStylesAssistant(
+        @NotBlank @RequestHeader("Authorization") authorizationHeader: String
+    ): StylesAssistantDto =
+        assistantService.getAssistantByApiKey(JwtUtil.getKeyFromAuthHeader(authorizationHeader)).let {
+            StylesAssistantDto(it.name, it.styles)
+        }
 }

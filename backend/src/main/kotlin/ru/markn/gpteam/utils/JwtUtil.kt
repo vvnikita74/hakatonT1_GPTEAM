@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
+import ru.markn.gpteam.exceptions.IncorrectArgumentException
 import java.security.Key
 import java.time.Duration
 import java.util.*
@@ -25,6 +26,10 @@ class JwtUtil(
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(JwtUtil::class.java)
+
+        fun getKeyFromAuthHeader(authHeader: String): String = authHeader
+            .replace("Bearer ", "")
+            .ifBlank { throw IncorrectArgumentException("Token is empty") }
     }
 
     fun generateToken(userDetails: UserDetails): String {

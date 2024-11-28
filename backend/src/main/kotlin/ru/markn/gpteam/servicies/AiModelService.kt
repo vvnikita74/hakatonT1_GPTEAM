@@ -4,5 +4,5 @@ import ru.markn.gpteam.dtos.ChatAssistantDto
 import ru.markn.gpteam.dtos.ChatMessageDto
 
 interface AiModelService {
-    suspend fun chatCompletion(authHeader: String, chatAssistantDto: ChatAssistantDto): ChatMessageDto
+    suspend fun chatCompletion(apiKey: String, chatAssistantDto: ChatAssistantDto): ChatMessageDto
 }
