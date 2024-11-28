@@ -1,11 +1,15 @@
 package ru.markn.gpteam.servicies
 
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import ru.markn.gpteam.clients.FileDecoderClient
+import ru.markn.gpteam.configurations.RedisConfig
+import ru.markn.gpteam.dtos.AssistantDto
 import ru.markn.gpteam.dtos.AuthDto
 import ru.markn.gpteam.dtos.UpdateAssistantDto
 import ru.markn.gpteam.exceptions.EntityAlreadyExistsException
@@ -15,6 +19,7 @@ import ru.markn.gpteam.models.Assistant
 import ru.markn.gpteam.models.Prompt
 import ru.markn.gpteam.repositories.AssistantRepository
 import ru.markn.gpteam.repositories.PromptRepository
+import ru.markn.gpteam.utils.toDto
 import java.security.SecureRandom
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
@@ -24,17 +29,16 @@ import kotlin.jvm.optionals.getOrNull
 class AssistantServiceImpl(
     private val assistantRepository: AssistantRepository,
     private val promptRepository: PromptRepository,
+    private val fileDecoderClient: FileDecoderClient,
     private val passwordEncoder: PasswordEncoder
 ) : AssistantService {
-
-    override fun getAssistantById(id: Long): Assistant = assistantRepository.findById(id)
-        .orElseThrow { EntityNotFoundException("Assistant with id: $id not found") }
 
     override fun getAssistantByName(name: String): Assistant = assistantRepository.findByName(name)
         .orElseThrow { EntityNotFoundException("Assistant with name: $name not found") }
 
-    override fun getAssistantByApiKey(apiKey: String): Assistant = assistantRepository.findByApiKey(apiKey)
-        .orElseThrow { EntityNotFoundException("Assistant with apiKey: $apiKey not found") }
+    @Cacheable(value = [RedisConfig.ASSISTANT_API_KEY], key = "#apiKey")
+    override fun getAssistantByApiKey(apiKey: String): AssistantDto = assistantRepository.findByApiKey(apiKey)
+        .orElseThrow { EntityNotFoundException("Assistant with apiKey: $apiKey not found") }.toDto()
 
     override fun addAssistant(authDto: AuthDto): Assistant {
         if (assistantRepository.existsByName(authDto.assistant)) {
@@ -52,6 +56,7 @@ class AssistantServiceImpl(
             throw IllegalArgumentException("Assistant name can't be blank")
         }
         val assistant = getAssistantByName(updateAssistantDto.assistant)
+
         updateAssistantDto.styles?.let { styles ->
             if (styles.isEmpty()) {
                 throw IllegalArgumentException("Styles can't be empty")
@@ -75,13 +80,14 @@ class AssistantServiceImpl(
                 }
             } ?: throw EntityNotFoundException("File with id: ${fileDto.id} not found")
         }
-        // TODO: Реализация внешнего сервиса для получения контента файлов
-        val filePrompts = updateAssistantDto.files?.map { file ->
-            Prompt(
-                name = file.originalFilename ?: throw IncorrectArgumentException("File name can't be blank"),
-                content = file.bytes.toString(),
-                assistant = assistant
-            )
+        val filePrompts = updateAssistantDto.files?.let { files ->
+            fileDecoderClient.decodeFiles(files).map {
+                Prompt(
+                    name = it.filename,
+                    content = it.content,
+                    assistant = assistant
+                )
+            }
         }
         val newPrompts = assistant.prompts.toMutableList().apply {
             textPrompt?.let {
@@ -103,13 +109,6 @@ class AssistantServiceImpl(
                 prompts = newPrompts
             )
         )
-    }
-
-    override fun deleteAssistant(id: Long) {
-        if (!assistantRepository.existsById(id)) {
-            throw EntityNotFoundException("Assistant with id: $id not found")
-        }
-        assistantRepository.deleteById(id)
     }
 
     override fun loadUserByUsername(name: String): UserDetails {

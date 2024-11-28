@@ -9,7 +9,7 @@ import ru.markn.gpteam.dtos.DetailsAssistantDto
 import ru.markn.gpteam.dtos.FormDataUpdateAssistantDto
 import ru.markn.gpteam.servicies.AiModelService
 import ru.markn.gpteam.servicies.AssistantService
-import ru.markn.gpteam.utils.toDto
+import ru.markn.gpteam.utils.toDetailsDto
 import java.security.Principal
 
 @RestController
@@ -20,7 +20,7 @@ class AssistantController(
 ) {
     @GetMapping("/assistant")
     fun getAssistant(principal: Principal): DetailsAssistantDto =
-        assistantService.getAssistantByName(principal.name).toDto()
+        assistantService.getAssistantByName(principal.name).toDetailsDto()
 
     @PostMapping("/assistant")
     fun saveAssistant(
@@ -28,12 +28,12 @@ class AssistantController(
         principal: Principal
     ): DetailsAssistantDto =
         assistantService.updateAssistant(
-            formDataUpdateAssistantDto.copy(assistant = principal.name).toDto()
-        ).toDto()
+            formDataUpdateAssistantDto.copy(assistant = principal.name).toDetailsDto()
+        ).toDetailsDto()
 
     @PostMapping("/chat")
-    fun chatWithAssistant(
+    suspend fun chatWithAssistant(
         @NotBlank @RequestHeader("Authorization") authorizationHeader: String,
         @Valid @RequestBody chatMessagesDto: ChatAssistantDto
-    ) : ChatMessageDto = aiModelService.chatCompletion(authorizationHeader, chatMessagesDto)
+    ): ChatMessageDto = aiModelService.chatCompletion(authorizationHeader, chatMessagesDto)
 }

@@ -8,7 +8,7 @@ spring:
     name: gpteam-backend
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   docker:
     compose:
       profiles:
@@ -22,6 +22,10 @@ jwt:
 
 front:
   url: ${FRONT_URL:*}
+
+file:
+  decoder:
+      url: ${FILE_DECODER_URL}
 
 ai:
   url: ${AI_URL}

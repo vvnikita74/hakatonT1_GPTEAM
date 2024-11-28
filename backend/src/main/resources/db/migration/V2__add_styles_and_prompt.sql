@@ -1,7 +1,7 @@
 -- Добавляем таблицу с системными промптами
 CREATE TABLE prompts
 (
-    id           SERIAL PRIMARY KEY,
+    id           BIGSERIAL PRIMARY KEY,
     name         VARCHAR(255) NOT NULL,
     content      TEXT         NOT NULL,
     assistant_id BIGINT       NOT NULL,

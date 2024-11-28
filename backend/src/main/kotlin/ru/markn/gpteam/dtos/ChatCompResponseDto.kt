@@ -1,7 +1,8 @@
 package ru.markn.gpteam.dtos
 
-import java.io.Serializable
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ChatCompResponseDto(
     val choices: List<ChatCompChoiceDto>
-) : Serializable
+)
