@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import app_setting
 from decors.decors import router
+from connectPostgres import connect
 
 
 app = FastAPI(
@@ -17,7 +18,8 @@ app = FastAPI(
 origin = [
     "http://localhost",
     "http://localhost:8080",
-    "http://localhost:8081"
+    "http://localhost:8081",
+    "*"
 ]
 
 app.add_middleware(
@@ -29,6 +31,7 @@ app.add_middleware(
 
 
 app.include_router(router, prefix="/api/v1", tags=["file"])
+app.include_router(connect.router, prefix="/api/v1", tags=["bd"])
 
 
 if __name__ == "__main__":
