@@ -11,5 +11,7 @@ data class UpdateAssistantDto(
     @field:NotEmptyOrNull(message = "Styles cannot be empty")
     val styles: String?,
     val text: String?,
+    val dbConnect: DbConnectDto?,
+    val urlParse: UrlParseDto?,
     val deletedFiles: List<FileAssistantDto>?
 ) : Serializable

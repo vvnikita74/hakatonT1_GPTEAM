@@ -20,8 +20,7 @@ class JwtRequestFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authHeader = request.getHeader("Authorization")
-        authHeader?.let {
+        request.getHeader("Authorization")?.let {
             if (it.startsWith("Bearer ")) {
                 val token = it.replace("Bearer ", "")
                 val username = jwtUtil.getUsernameFromToken(token)

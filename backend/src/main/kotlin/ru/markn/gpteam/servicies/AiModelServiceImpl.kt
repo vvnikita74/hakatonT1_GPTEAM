@@ -12,6 +12,6 @@ class AiModelServiceImpl(
 
     override suspend fun chatCompletion(apiKey: String, chatAssistantDto: ChatAssistantDto): ChatMessageDto =
         aiModelClient.chatCompletion(
-            chatAssistantDto.messages + assistantService.getAssistantByApiKey(apiKey).prompts
+            assistantService.getAssistantByApiKey(apiKey).prompts + chatAssistantDto.messages
         )
 }

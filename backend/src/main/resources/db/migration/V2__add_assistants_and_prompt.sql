@@ -17,5 +17,5 @@ CREATE TABLE prompts
 );
 
 -- Добавляем админа-ассистента
-INSERT INTO assistants (id, styles, api_key)
-VALUES (1, '', 'n7Z3OSfudx6QuH0GWvwAXIStDkt1JGla3zS7uE0wUfs');
+INSERT INTO assistants (styles, api_key)
+VALUES ('', 'n7Z3OSfudx6QuH0GWvwAXIStDkt1JGla3zS7uE0wUfs');
