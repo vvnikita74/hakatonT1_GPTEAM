@@ -42,7 +42,7 @@ export default function StyleManager({ className = '' }) {
 				}
 			}
 		},
-		100
+		250
 	)
 
 	return (

@@ -6,7 +6,7 @@ export default interface Styles {
 }
 
 export const defaultStyles: Styles = {
-	backgroundColor: 'white',
+	backgroundColor: '#99ccff',
 	textColor: 'black',
 	containerPadding: 18,
 	containerRadius: 12

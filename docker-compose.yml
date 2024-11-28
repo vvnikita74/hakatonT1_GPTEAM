@@ -10,6 +10,12 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
 
+  redis:
+    image: redis:latest
+    container_name: gpteam-redis
+    ports:
+      - "${REDIS_PORT}:6379"
+
   backend:
     image: mark3317/gpteam-backend:latest
     container_name: gpteam-backend
@@ -19,27 +25,30 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-      - FRONT_URL=${FRONT_URL}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
       - JWT_SECRET=${JWT_SECRET}
+      - FILE_DECODER_URL=microservice:8000
+      - FRONT_URL=${FRONT_URL}
       - AI_URL=${AI_URL}
       - AI_APIKEY=${AI_APIKEY}
     ports:
       - "${BACKEND_PORT}:8080"
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "8090:80"
-    environment:
-      - API_URL=${API_URL}
-    volumes:
-      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+     build:
+       context: ./frontend
+       dockerfile: Dockerfile
+     ports:
+       - "8090:80"
+     environment:
+       - API_URL=${API_URL}
+     volumes:
+       - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
   microservice:
-    build:
-      context: ./microservice
-      dockerfile: Dockerfile
-    ports:
-      - "8091:8000"
+     build:
+       context: ./microservice
+       dockerfile: Dockerfile
+     ports:
+       - "8091:8000"

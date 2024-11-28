@@ -9,7 +9,12 @@ import dotenv from 'dotenv'
 
 import 'webpack-dev-server'
 
-const env = dotenv.config().parsed || {}
+const envFromFile = dotenv.config().parsed || {}
+
+const env = {
+	...envFromFile,
+	...process.env
+}
 
 const webpackConfig = (envConfig: {
 	production: string

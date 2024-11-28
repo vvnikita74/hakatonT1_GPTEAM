@@ -11,7 +11,7 @@ import {
 
 import createStore from 'react-auth-kit/createStore'
 import AuthProvider from 'react-auth-kit'
-// import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
+import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
 
 import LoginPage from 'pages/login'
 import Home from 'pages/home'
@@ -27,11 +27,11 @@ const router = createBrowserRouter(
 	createRoutesFromElements(
 		<>
 			<Route path='/login' element={<LoginPage />} />
-			{/* <Route
+			<Route
 				element={<AuthOutlet fallbackPath='/login' />}
-				errorElement={null}> */}
-			<Route index element={<Home />} />
-			{/* </Route> */}
+				errorElement={null}>
+				<Route index element={<Home />} />
+			</Route>
 		</>
 	)
 )

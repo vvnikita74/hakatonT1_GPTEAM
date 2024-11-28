@@ -64,11 +64,19 @@ body {
 	margin: 0 auto;
 }
 
-body, body > div {
-	width: 100vw;
-	height: 100dvh;
-	height: 100vh;
-	overflow: hidden;
+@media(min-width: 1024px) {
+	body, body > div {
+		width: 100vw;
+		height: 100dvh;
+		height: 100vh;
+		overflow: hidden;
+	}	
+}
+
+@media(max-width: 1024px) {
+	body {
+		padding-bottom: 4rem;
+	}
 }
 
 @keyframes gradient {
@@ -100,12 +108,16 @@ body, body > div {
 	}
 }
 
-.disabled-text {
-	display: none;
-}
-
 .chat-disabled {
-	.disabled-text {
-		display: flex;
+	form {
+		input {
+			@apply border-red-500 opacity-50 pointer-events-none;
+		}
+		button {
+			@apply pointer-events-none;
+			svg {
+				@apply text-red-500 opacity-50;
+			}
+		}
 	}
 }

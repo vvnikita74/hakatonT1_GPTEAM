@@ -19,14 +19,14 @@ export default function Chat({ className = '' }) {
 				{user?.name || 'Чат-ассистент'} (предварительный
 				просмотр)
 			</div>
-			<div
+			{/* <div
 				className='disabled-text title-text absolute left-0 top-0 size-full
 					items-center justify-center bg-black/50 text-center text-red-500'>
 				<span>
-					Для доступа необходимо загрузить файлы и&nbsp;сохранить
-					изменения
+					Для доступа необходимо загрузить знания
+					и&nbsp;сохранить изменения
 				</span>
-			</div>
+			</div> */}
 			<ChatContextProvider>
 				<ContentView className='mt-4' />
 			</ChatContextProvider>

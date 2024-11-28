@@ -1,6 +1,6 @@
 import {
 	useFilesContext,
-	useIsSaveContext,
+	useStatusContext,
 	useStylesContext
 } from 'components/context'
 import { useEffect, useRef } from 'react'
@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
 export default function StylesListener({ containerID = '' }) {
 	const styles = useStylesContext()
 	const files = useFilesContext()
-	const isSaved = useIsSaveContext()
+	const { saved } = useStatusContext()
 
 	const containerRef = useRef(null)
 
@@ -23,10 +23,10 @@ export default function StylesListener({ containerID = '' }) {
 		if (current) {
 			current.classList.toggle(
 				'chat-disabled',
-				files.length === 0 || !isSaved
+				files.length === 0 || !saved
 			)
 		}
-	}, [files, isSaved])
+	}, [files, saved])
 
 	useEffect(() => {
 		const { current } = containerRef

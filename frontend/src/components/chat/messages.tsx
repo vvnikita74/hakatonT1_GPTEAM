@@ -12,7 +12,7 @@ export default function Messages({ className = '' }) {
 			{messages.map(({ isUser, text, pending }, index) => (
 				<div
 					key={text + index}
-					className={`base-text ${isUser ? 'self-end' : ''}
+					className={`base-text mt-2 first:mt-0 ${isUser ? 'self-end' : ''}
 					${pending ? 'opacity-50' : ''}`}>
 					{text}
 					{pending && 'Думаю...'}

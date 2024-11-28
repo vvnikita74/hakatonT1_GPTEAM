@@ -20,18 +20,7 @@ export interface ChatMessage {
 export default function ChatContextProvider({
 	children = null
 }) {
-	const [messages, setMessages] = useState<ChatMessage[]>([
-		{
-			isUser: true,
-			text: 'Привет, сколько мне лет?',
-			pending: false
-		},
-		{
-			isUser: false,
-			text: 'Привет, 22',
-			pending: false
-		}
-	])
+	const [messages, setMessages] = useState<ChatMessage[]>()
 
 	return (
 		<SetMessagesContext.Provider value={setMessages}>

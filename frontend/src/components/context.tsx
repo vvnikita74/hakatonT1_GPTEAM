@@ -4,13 +4,14 @@ import {
 	useMemo,
 	useContext
 } from 'react'
+import Status, { defaultStatus } from 'types/status'
 
 import type Styles from 'types/style'
 import { defaultStyles } from 'types/style'
 
 const FilesContext = createContext(null)
 const StylesContext = createContext(null)
-const IsSavedContext = createContext(null)
+const StatusContext = createContext(null)
 const SettersContext = createContext(null)
 
 export function useSetterContext() {
@@ -25,29 +26,29 @@ export function useStylesContext() {
 	return useContext(StylesContext)
 }
 
-export function useIsSaveContext() {
-	return useContext(IsSavedContext)
+export function useStatusContext() {
+	return useContext(StatusContext)
 }
 
 export default function ContextProvider({ children }) {
 	const [files, setFiles] = useState<File[]>([])
 	const [styles, setStyles] = useState<Styles>(defaultStyles)
-	const [isSaved, setIsSaved] = useState<boolean>(false)
+	const [status, setStatus] = useState<Status>(defaultStatus)
 
 	const setters = useMemo(
-		() => ({ setFiles, setStyles, setIsSaved }),
+		() => ({ setFiles, setStyles, setStatus }),
 		[setFiles, setStyles]
 	)
 
 	return (
 		<SettersContext.Provider value={setters}>
-			<IsSavedContext.Provider value={isSaved}>
+			<StatusContext.Provider value={status}>
 				<FilesContext.Provider value={files}>
 					<StylesContext.Provider value={styles}>
 						{children}
 					</StylesContext.Provider>
 				</FilesContext.Provider>
-			</IsSavedContext.Provider>
+			</StatusContext.Provider>
 		</SettersContext.Provider>
 	)
 }

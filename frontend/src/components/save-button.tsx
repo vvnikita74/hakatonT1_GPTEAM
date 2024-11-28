@@ -14,7 +14,7 @@ export default function SaveButton() {
 
 	const files = useFilesContext()
 	const styles = useStylesContext()
-	const { setPending } = useSetterContext()
+	const { setStatus } = useSetterContext()
 
 	useEffect(() => {
 		return () => {
@@ -26,18 +26,22 @@ export default function SaveButton() {
 	}, [files, styles])
 
 	const handleClick = async () => {
-		setPending(true)
-
+		setStatus({ saved: false, pending: true })
 		const formData = new FormData()
 
-		formData.append('files[]', files)
+		formData.append('files', files)
 		formData.append('styles', JSON.stringify(styles))
 
 		const req = await fetch(`${API_URL}/assistant`, {
 			method: 'POST',
 			headers: {
 				Authorization: authHeader,
-				'Content-Type': 'multipart/form-data'
+				'Content-Type': 'multipart/form-data',
+				'Access-Control-Allow-Origin': '*'
+				// 'Access-Control-Allow-Methods':
+				// 	'GET, POST, OPTIONS, PUT, DELETE',
+				// 'Access-Control-Allow-Headers':
+				// 	'x-requested-with, Content-Type, Authorization, Origin, Accept'
 			},
 			body: formData
 		})
@@ -51,8 +55,8 @@ export default function SaveButton() {
 			type='button'
 			onClick={handleClick}
 			ref={btnRef}
-			className='base-text base-padding absolute bottom-5 right-5 bg-indigo-500
-				opacity-0 transition-opacity'>
+			className='base-text base-padding fixed bottom-5 right-5 bg-indigo-500
+				opacity-0 transition-opacity lg:absolute'>
 			Сохранить
 		</button>
 	)
