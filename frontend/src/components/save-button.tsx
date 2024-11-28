@@ -32,22 +32,22 @@ export default function SaveButton() {
 		formData.append('files', files)
 		formData.append('styles', JSON.stringify(styles))
 
-		const req = await fetch(`${API_URL}/assistant`, {
-			method: 'POST',
-			headers: {
-				Authorization: authHeader,
-				'Content-Type': 'multipart/form-data',
-				'Access-Control-Allow-Origin': '*'
-				// 'Access-Control-Allow-Methods':
-				// 	'GET, POST, OPTIONS, PUT, DELETE',
-				// 'Access-Control-Allow-Headers':
-				// 	'x-requested-with, Content-Type, Authorization, Origin, Accept'
-			},
-			body: formData
-		})
+		try {
+			const req = await fetch(`${API_URL}/assistant`, {
+				method: 'POST',
+				headers: {
+					Authorization: authHeader,
+					'Content-Type': 'multipart/form-data'
+				},
+				body: formData
+			})
 
-		const res = await req.json()
-		console.log(res)
+			const res = await req.json()
+			console.log(res)
+		} catch (error) {
+			console.error(error)
+			setStatus({ saved: false, pending: false })
+		}
 	}
 
 	return (

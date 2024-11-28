@@ -20,7 +20,7 @@ export interface ChatMessage {
 export default function ChatContextProvider({
 	children = null
 }) {
-	const [messages, setMessages] = useState<ChatMessage[]>()
+	const [messages, setMessages] = useState<ChatMessage[]>([])
 
 	return (
 		<SetMessagesContext.Provider value={setMessages}>

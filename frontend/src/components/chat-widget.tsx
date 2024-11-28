@@ -11,7 +11,7 @@ export default function Chat({ className = '' }) {
 		<div
 			id='assistant-container'
 			className={`relative flex flex-col rounded-[var(--containerRadius,12px)]
-				bg-[var(--backgroundColor,#ffffff)]
+				bg-[var(--backgroundColor,#99ccff)]
 				p-[var(--containerPadding,18px)]
 				text-[color:var(--textColor,#000000)] transition-all ${className}`}>
 			<StylesListener containerID='assistant-container' />

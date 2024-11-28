@@ -1,4 +1,4 @@
-import { FormEvent } from 'react'
+import { FormEvent, useRef } from 'react'
 import SendIcon from 'public/images/send.svg'
 import Spinner from 'components/icons/spinner'
 
@@ -13,9 +13,15 @@ export default function ChatInput({ className = '' }) {
 	const setMessages = useSetMessageContext()
 
 	const { btnRef, toggleLoader } = useLoader()
+	const inputRef = useRef(null)
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-		console.log(event)
+		const { current } = inputRef
+		if (current) {
+			current.value = ''
+		}
+
+		event.preventDefault()
 		toggleLoader(true)
 
 		setMessages((prev: ChatMessage[]) => [
@@ -29,6 +35,7 @@ export default function ChatInput({ className = '' }) {
 			className={`flex flex-row justify-between ${className}`}
 			onSubmit={handleSubmit}>
 			<input
+				ref={inputRef}
 				type='text'
 				className='rounded-[var(--containerRadius,12px)] border
 					border-[color:var(--textColor,#000000)] p-2
@@ -36,9 +43,9 @@ export default function ChatInput({ className = '' }) {
 			/>
 			<button
 				type='submit'
-				className='btn-loader ml-2'
+				className='btn-loader relative ml-2'
 				ref={btnRef}>
-				<span className='pointer-events-none text-inherit transition-opacity'>
+				<span className='pointer-events-none flex text-inherit transition-opacity'>
 					<SendIcon className='pointer-events-none text-[color:var(--textColor,#000000)]' />
 				</span>
 				<Spinner

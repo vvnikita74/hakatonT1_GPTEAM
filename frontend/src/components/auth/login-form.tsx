@@ -41,7 +41,16 @@ export default function LoginForm({ className = '' }) {
 				const req = await fetch(`${API_URL}/signIn`, {
 					method: 'POST',
 					headers: {
-						'Content-type': 'application/json'
+						'Content-type': 'application/json',
+						'Access-Control-Allow-Origin':
+							'http://localhost:8081',
+						Origin: 'http://localhost:8081',
+						'Access-Control-Allow-Methods':
+							'POST, GET, OPTIONS, DELETE, PUT',
+						'Access-Control-Allow-Headers':
+							'x-requested-with, Content-Type, Origin, Authorization, Accept',
+						'Content-Security-Policy':
+							'connect-src http://192.168.0.139:8080'
 					},
 					body: JSON.stringify(data)
 				})
