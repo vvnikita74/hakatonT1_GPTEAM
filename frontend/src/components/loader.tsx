@@ -8,7 +8,7 @@ export default function Loader() {
 		<div
 			className={`fixed left-0 top-0 size-full items-center justify-center
 				bg-black/50 ${pending ? 'flex' : 'hidden'}`}>
-			<Spinner className='size-6 fill-indigo-500 text-white' />
+			<Spinner className='size-10 fill-indigo-500 text-white' />
 		</div>
 	)
 }

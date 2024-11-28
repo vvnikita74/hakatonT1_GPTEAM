@@ -27,7 +27,7 @@ export default function FileInput() {
 		<button
 			type='button'
 			onClick={handleClick}
-			className='base-text w-fit bg-indigo-500 p-2 text-white'>
+			className='base-padding base-text w-fit rounded-xl bg-indigo-500 text-white'>
 			<input
 				type='file'
 				multiple

@@ -8,8 +8,12 @@ import {
 } from 'components/chat/context'
 
 import useLoader from 'utils/use-loader'
+import { API_URL } from 'utils/config'
 
-export default function ChatInput({ className = '' }) {
+export default function ChatInput({
+	className = '',
+	apiKey = ''
+}) {
 	const setMessages = useSetMessageContext()
 
 	const { btnRef, toggleLoader } = useLoader()
@@ -17,17 +21,63 @@ export default function ChatInput({ className = '' }) {
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		const { current } = inputRef
+		let text = ''
+
 		if (current) {
+			text = current.value
 			current.value = ''
 		}
 
 		event.preventDefault()
 		toggleLoader(true)
 
-		setMessages((prev: ChatMessage[]) => [
-			...prev,
-			{ pending: true, text: '', isUser: false }
-		])
+		let newArr = []
+
+		setMessages((prev: ChatMessage[]) => {
+			const stateArr = [
+				...prev,
+				{ pending: false, text, isUser: true },
+				{ pending: true, text: '', isUser: false }
+			]
+			newArr = [...stateArr]
+			return stateArr
+		})
+
+		newArr.pop()
+
+		fetch(`${API_URL}/chat`, {
+			method: 'POST',
+			headers: {
+				Authorization: apiKey,
+				'Content-type': 'application/json'
+			},
+			body: JSON.stringify({
+				messages: newArr.map(item => ({
+					role: item.isUser ? 'user' : 'assistant',
+					content: item.text
+				}))
+			})
+		})
+			.then(res => res.json())
+			.then(res => {
+				setMessages((prev: ChatMessage[]) => {
+					const stateArr = [...prev]
+					stateArr.pop()
+					return [
+						...stateArr,
+						{
+							isUser: false,
+							text: res.content,
+							pending: false
+						}
+					]
+				})
+
+				toggleLoader(false)
+			})
+			.catch(() => {
+				toggleLoader(false)
+			})
 	}
 
 	return (
@@ -37,8 +87,8 @@ export default function ChatInput({ className = '' }) {
 			<input
 				ref={inputRef}
 				type='text'
-				className='rounded-[var(--containerRadius,12px)] border
-					border-[color:var(--textColor,#000000)] p-2
+				className='base-padding rounded-[var(--containerRadius,12px)] border
+					border-[color:var(--borderColor,#000000)]
 					caret-[var(--textColor,#000000)]'
 			/>
 			<button
@@ -50,7 +100,7 @@ export default function ChatInput({ className = '' }) {
 				</span>
 				<Spinner
 					className='absolute left-[calc(50%-0.75rem)] top-[calc(50%-0.75rem)] size-6
-						fill-black text-white'
+						fill-black text-indigo-500'
 				/>
 			</button>
 		</form>

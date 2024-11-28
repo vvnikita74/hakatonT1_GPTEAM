@@ -15,7 +15,8 @@ export default function NumberInput({
 }) {
 	return (
 		<div
-			className={`flex flex-row items-center bg-indigo-500 p-2 ${className}`}>
+			className={`base-padding flex flex-row items-center rounded-xl bg-indigo-500
+				text-white ${className}`}>
 			<label className='base-text'>{label}</label>
 			<input
 				type='number'
@@ -23,8 +24,8 @@ export default function NumberInput({
 				data-type='number'
 				defaultValue={defaultValue}
 				onChange={handleChange}
-				className='base-text ml-5 h-7 w-7 bg-black text-center text-white
-					transition-colors focus:bg-opacity-70'
+				className='base-text ml-5 h-7 w-7 bg-black text-center transition-colors
+					focus:bg-opacity-70'
 			/>
 		</div>
 	)
