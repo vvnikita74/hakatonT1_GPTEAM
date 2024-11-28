@@ -16,11 +16,23 @@ services:
     ports:
       - "${REDIS_PORT}:6379"
 
+  file-decoder:
+    build:
+      context: ./microservice
+      dockerfile: Dockerfile
+    container_name: gpteam-file-decoder
+    ports:
+      - "${FILE_DECODER_PORT}:8000"
+
   backend:
-    image: mark3317/gpteam-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: gpteam-backend
     depends_on:
       - db
+      - redis
+      - file-decoder
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
@@ -28,8 +40,8 @@ services:
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_DATA_REDIS_PORT=6379
       - JWT_SECRET=${JWT_SECRET}
-      - FILE_DECODER_URL=microservice:8000
-      - FRONT_URL=${FRONT_URL}
+      - FILE_DECODER_URL=http://file-decoder:8000
+      - FRONT_URL=http://frontend:80
       - AI_URL=${AI_URL}
       - AI_APIKEY=${AI_APIKEY}
     ports:
@@ -39,16 +51,10 @@ services:
      build:
        context: ./frontend
        dockerfile: Dockerfile
+     container_name: gpteam-frontend
      ports:
        - "8090:80"
      environment:
-       - API_URL=${API_URL}
+       - API_URL=http://localhost:${BACKEND_PORT}
      volumes:
        - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-
-  microservice:
-     build:
-       context: ./microservice
-       dockerfile: Dockerfile
-     ports:
-       - "8091:8000"
