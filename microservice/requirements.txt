@@ -13,3 +13,5 @@ orjson==3.10.12
 loguru
 SQLAlchemy==2.0.36
 asyncpg==0.30.0
+bs4==0.0.2
+requests==2.32.3
