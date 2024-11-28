@@ -34,8 +34,7 @@ services:
       - "${FILE_DECODER_PORT}:8000"
 
   backend:
-    build:
-      dockerfile: Dockerfile
+    image: mark3317/gpteam-backend:latest
     container_name: gpteam-backend
     profiles:
       - compose

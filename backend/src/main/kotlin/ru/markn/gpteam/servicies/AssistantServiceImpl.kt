@@ -1,11 +1,13 @@
 package ru.markn.gpteam.servicies
 
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.markn.gpteam.clients.FileDecoderClient
+import ru.markn.gpteam.configurations.RedisConfig
 import ru.markn.gpteam.dtos.AssistantDto
 import ru.markn.gpteam.dtos.AuthDto
 import ru.markn.gpteam.dtos.UpdateAssistantDto
@@ -40,6 +42,7 @@ class AssistantServiceImpl(
         EntityNotFoundException("Assistant with name: $name not found")
     }.let { it.assistant ?: addAssistant(it) }
 
+    @Cacheable(value = [RedisConfig.ASSISTANT_API_KEY], key = "#apiKey")
     override fun getAssistantByApiKey(apiKey: String): AssistantDto = assistantRepository.findByApiKey(apiKey)
         .orElseThrow { EntityNotFoundException("Assistant with apiKey: $apiKey not found") }.toDto()
 
